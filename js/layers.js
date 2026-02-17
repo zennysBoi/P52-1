@@ -7,12 +7,12 @@ addLayer("Seconds", {
 		points: new Decimal(0),
     }},
     color: "#a86fdd",
-    requires: new Decimal(10), // Can be a function that takes requirement increases into account
-    resource: "Elapsed Seconds", // Name of prestige currency
-    baseResource: "seconds", // Name of resource prestige is based on
+    requires: new Decimal(1), // Can be a function that takes requirement increases into account
+    resource: "Seconds Wasted", // Name of prestige currency
+    baseResource: "seconds passed", // Name of resource prestige is based on
     baseAmount() {return player.points}, // Get the current amount of baseResource
     type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
-    exponent: 0.5, // Prestige currency exponent
+    exponent: 1, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
         return mult
@@ -27,10 +27,24 @@ addLayer("Seconds", {
     upgrades: {
         11: {
             title: "I'm Bored",
-            description: "Take up card shuffling, inadvertantly wasting an additional second every second. [fix later]",
+            description: "Take up card shuffling, inadvertantly Wasting an additional Second every Second.",
             cost: new Decimal(10),
         },
-    },
-    layerShown(){return true}
-    
-})
+        12: {
+            title: "Jerry",
+            description: "Your friend Jerry inquires as to what you're doing. You convinced him to join you in your pursuits, doubling Seconds Wasted.",
+            cost: new Decimal(12),
+        },
+        21: {
+            title: "Hyperbolic Resecondizer",
+            description: "You realize the more seconds you've wasted, the faster new seconds pass. Time passes faster based on current number of Seconds Wasted.",
+            cost: new Decimal(240),
+            effect() {
+                    return player[this.layer].points.add(1).pow(0.35)
+                },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            },
+        },
+        layerShown(){return true}
+
+    })
